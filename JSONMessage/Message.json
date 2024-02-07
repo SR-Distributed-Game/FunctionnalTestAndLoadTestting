@@ -1,0 +1,26 @@
+{
+  "Type": "UpdateObject",
+  "ClientID": 0,
+  "Metadata": {
+    "objectData": {
+      "transform": {
+        "position": {
+          "x": 165,
+          "y": 100
+        },
+        "scale": {
+          "x": 20,
+          "y": 20
+        },
+        "rotation": 0
+      },
+      "name": "Lumi",
+      "id": 3,
+      "points": 0,
+      "speed": 5,
+      "clientID": 0,
+      "Type": "player"
+    }
+  },
+  "RoomID": -1
+}
