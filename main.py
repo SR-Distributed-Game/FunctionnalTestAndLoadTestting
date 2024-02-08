@@ -46,7 +46,7 @@ def create_threads(number_of_threads, url, message, interval):
         thread.join()
 
 if __name__ == "__main__":
-    NUMBER_OF_THREADS = 100
+    NUMBER_OF_THREADS = 50
     WEBSOCKET_URL = "ws://localhost:8080/game"
     INTERVAL = 1/60
 
