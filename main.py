@@ -6,18 +6,30 @@ except ImportError:
     import _thread as thread
 import time
 
+def handle_message(ws):
+    """Fonction pour écouter et traiter les messages reçus."""
+    while True:
+        message = ws.recv()
+        pass
+
+
 def send_message_to_websocket(url, message, interval):
-    """Fonction pour envoyer un message à un WebSocket en boucle."""
+    """Fonction pour envoyer un message à un WebSocket en boucle et écouter les messages reçus."""
     ws = None
     try:
         # Utilisez create_connection pour établir la connexion WebSocket
         ws = websocket.create_connection(url)
+
+        # Créer un thread pour écouter les messages reçus
+        listener_thread = threading.Thread(target=handle_message, args=(ws,))
+        listener_thread.daemon = True  # Permet au thread d'être fermé lorsque le programme principal se termine
+        listener_thread.start()
+
         while True:
             ws.send(message)
-            print(f"Message envoyé - " + str(threading.get_ident()))
             time.sleep(interval)
     except Exception as e:
-        print(f"Erreur lors de l'envoi du message : {e}")
+        print(f"Erreur lors de l'envoi ou de la réception du message {threading.get_ident()} : {e}")
     finally:
         if ws is not None:
             ws.close()
@@ -34,27 +46,14 @@ def create_threads(number_of_threads, url, message, interval):
         thread.join()
 
 if __name__ == "__main__":
-    NUMBER_OF_THREADS = 1
+    NUMBER_OF_THREADS = 100
     WEBSOCKET_URL = "ws://localhost:8080/game"
-    INTERVAL = 1000
-    MESSAGE = """{"Type": "UpdateObject","ClientID": 0,
-  "Metadata": {
-    "objectData": {
-      "transform": {
-        "position": {
-          "x": 165,
-          "y": 100
-        },
-        "scale": {
-          "x": 20,
-          "y": 20
-        },
-        "rotation": 0
-      },
-      "name": "Lumi",
-      "id": 3,
-      "points": 0,
-      "speed": 5,"clientID": 0,"Type": "player"}},"RoomID": -1}"""
-    FIRST_MESSAGE = """{"Type":"SpawnObject","ClientID":0,"Metadata":{"objectData":{"transform":{"position":{"x":439.24161345001585,"y":169.02882205513788},"scale":{"x":10,"y":10},"rotation":134.76369761864186},"name":"fruit","id":-1,"SerializationTest":"","Type":"fruit"}},"RoomID":-1}"""
+    INTERVAL = 1/60
+
+    with open('./JSONMessage/Message.json', 'r') as file:
+        MESSAGE = file.read()
+
+    with open('./JSONMessage/FirstMessage.json', 'r') as file:
+        FIRST_MESSAGE = file.read()
 
     create_threads(NUMBER_OF_THREADS, WEBSOCKET_URL, MESSAGE, INTERVAL)
