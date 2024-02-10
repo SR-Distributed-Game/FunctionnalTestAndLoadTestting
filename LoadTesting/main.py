@@ -50,10 +50,10 @@ if __name__ == "__main__":
     WEBSOCKET_URL = "ws://localhost:8080/game"
     INTERVAL = 1/60
 
-    with open('./JSONMessage/Message.json', 'r') as file:
+    with open('./LoadTesting/JSONMessage/Message.json', 'r') as file:
         MESSAGE = file.read()
 
-    with open('./JSONMessage/FirstMessage.json', 'r') as file:
+    with open('./LoadTesting/JSONMessage/FirstMessage.json', 'r') as file:
         FIRST_MESSAGE = file.read()
 
     create_threads(NUMBER_OF_THREADS, WEBSOCKET_URL, MESSAGE, INTERVAL)
